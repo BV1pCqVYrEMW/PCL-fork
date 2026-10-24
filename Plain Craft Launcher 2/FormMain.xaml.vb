@@ -11,6 +11,9 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
         If BuildType = BuildTypes.Release Then
+            If LastVersion < 415 Then 'Release 3.00.0.0
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "去你大爷的"))
+            End If
             If LastVersion < 413 Then 'Release 2.99.0.0
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "删除：为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……"))
             End If
@@ -103,6 +106,9 @@ Public Class FormMain
             '3：BUG+ IMP* FEAT-
             '2：BUG* IMP-
             '1：BUG-
+            If LastVersion < 415 Then 'Release 3.00.0.0
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "去你大爷的"))
+            End If
             If LastVersion < 414 Then 'Snapshot 2.99.0.0
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "删除：为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……"))
             End If
