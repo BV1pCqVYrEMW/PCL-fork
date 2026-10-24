@@ -80,8 +80,7 @@ Public Module ModModpack
                     Throw New Exception("打开整合包文件失败，文件可能损坏或为不支持的压缩包格式", ex)
                 End If
             End Try
-            '执行对应的安装方法
-            If RestrictMcDownload Then Throw New Exception("为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……")
+            '执行对应的安装方法'
             Select Case PackType
                 Case 0
                     Logger.Info("整合包种类：CurseForge")
