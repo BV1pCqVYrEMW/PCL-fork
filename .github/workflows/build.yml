@@ -3,8 +3,65 @@ on:
   workflow_dispatch:
 
 jobs:
+  cleanup:
+    name: Cleanup Old Runs
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+
+    - name: Delete Old Workflow Runs and Artifacts
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPO: ${{ github.repository }}
+        KEEP_COUNT: '3'
+      run: |
+        set -euo pipefail
+        echo "仓库：$REPO，保留最近 $KEEP_COUNT 次成功构建"
+
+        # 1) 收集历史运行，保留最近 KEEP_COUNT 次成功运行，其余待删
+        gh api --paginate "repos/$REPO/actions/runs?per_page=100" \
+          --jq '.workflow_runs[] | "\(.id)\t\(.status)\t\(.conclusion)"' > runs.tsv || true
+
+        total=$(wc -l < runs.tsv || echo 0)
+        echo "历史运行总数：$total"
+
+        kept=0
+        to_delete=()
+        while IFS=$'\t' read -r id status conclusion; do
+          [ -z "${id:-}" ] && continue
+          if [ "$status" = "completed" ] && [ "$conclusion" = "success" ] && [ "$kept" -lt "$KEEP_COUNT" ]; then
+            kept=$((kept + 1))
+            echo "  保留 #$id（第 $kept 次成功运行）"
+            continue
+          fi
+          # 保留进行中的运行，避免打断
+          if [ "$status" != "completed" ]; then
+            echo "  跳过 #$id（$status，未完成）"
+            continue
+          fi
+          to_delete+=("$id")
+        done < runs.tsv
+
+        echo "待删除运行数：${#to_delete[@]}"
+        for id in "${to_delete[@]}"; do
+          echo "  删除 run #$id"
+          gh api -X DELETE "repos/$REPO/actions/runs/$id" || echo "    删除失败（可能已不存在）"
+        done
+
+        # 2) 清理已失效的 artifact（运行被删后残留的）
+        gh api --paginate "repos/$REPO/actions/artifacts?per_page=100" \
+          --jq '.artifacts[] | select(.expired == true) | .id' | while read -r aid; do
+            [ -z "${aid:-}" ] && continue
+            echo "  删除过期 artifact #$aid"
+            gh api -X DELETE "repos/$REPO/actions/artifacts/$aid" || true
+          done
+
+        echo "清理完成"
+
   build:
     name: Build
+    needs: cleanup
     runs-on: windows-latest
     strategy:  
        matrix:  
