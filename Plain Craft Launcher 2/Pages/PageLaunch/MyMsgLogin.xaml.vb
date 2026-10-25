@@ -111,7 +111,7 @@ Public Class MyMsgLogin
                         "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
                         "client_id=" & OAuthClientId & "&" &
                         "device_code=" & DeviceCode & "&" &
-                        "scope=XboxLive.signin%20offline_access",
+                        "scope=XboxLive.signin%20XboxLive.offline_access",
                     ContentType:="application/x-www-form-urlencoded",
                     Timeout:=5000 + UnknownFailureCount * 5000,
                     MakeLog:=False, RequireJson:=True)
