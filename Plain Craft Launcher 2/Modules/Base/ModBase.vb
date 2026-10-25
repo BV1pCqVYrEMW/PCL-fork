@@ -9,9 +9,9 @@ Public Module ModBase
     Public Const VersionBaseName As String = "3.00.0.0" '显示用版本名
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If RELEASE Then
-    Public Const VersionCode As Integer = 415 '正式版
+    Public Const VersionCode As Integer = 417 '正式版
 #Else
-    Public Const VersionCode As Integer = 416 '快照版
+    Public Const VersionCode As Integer = 418 '快照版
 #End If
 
     '版本信息

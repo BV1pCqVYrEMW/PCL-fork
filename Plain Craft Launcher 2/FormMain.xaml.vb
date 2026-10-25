@@ -11,8 +11,12 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
         If BuildType = BuildTypes.Release Then
-            If LastVersion < 415 Then 'Release 3.00.0.0
-                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "去你大爷的"))
+            If LastVersion < 417 Then 'Release 3.00.0.0
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "调整：合并上游 2.99.0.1 的稳定性修复"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "恢复：MC 下载与整合包安装（本分支不受上游限制）"))
+            End If
+            If LastVersion < 415 Then 'Release 2.99.0.1
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化：为设置更新添加部分黑名单"))
             End If
             If LastVersion < 413 Then 'Release 2.99.0.0
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "删除：为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……"))
@@ -106,8 +110,12 @@ Public Class FormMain
             '3：BUG+ IMP* FEAT-
             '2：BUG* IMP-
             '1：BUG-
-            If LastVersion < 415 Then 'Release 3.00.0.0
-                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "去你大爷的"))
+            If LastVersion < 418 Then 'Snapshot 3.00.0.0
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "调整：合并上游 2.99.0.1 的稳定性修复"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "恢复：MC 下载与整合包安装（本分支不受上游限制）"))
+            End If
+            If LastVersion < 416 Then 'Snapshot 2.99.0.1
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化：为设置更新添加部分黑名单"))
             End If
             If LastVersion < 414 Then 'Snapshot 2.99.0.0
                 FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "删除：为遵守相关法律法规，PCL 暂时不再提供 MC 下载功能，非常抱歉 qwq……"))
