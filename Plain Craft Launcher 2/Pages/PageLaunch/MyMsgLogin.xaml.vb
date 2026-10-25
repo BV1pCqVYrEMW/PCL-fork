@@ -106,7 +106,7 @@ Public Class MyMsgLogin
         Do While Not MyConverter.IsExited
             Try
                 Dim Result = NetRequestByClient(
-                    "https://login.microsoftonline.com/fad39b01-8fee-4b72-ad3a-caf0209f30a1/oauth2/v2.0/token", HttpMethod.Post,
+                    "https://login.microsoftonline.com/consumers/oauth2/v2.0/token", HttpMethod.Post,
                     Content:=
                         "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
                         "client_id=" & OAuthClientId & "&" &
