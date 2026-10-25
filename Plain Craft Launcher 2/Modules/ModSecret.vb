@@ -7,9 +7,10 @@ Friend Module ModSecret
     '在开源版的注册表与常规版的注册表隔离，以防数据冲突
     Public Const RegFolder As String = "PCLDebug"
     '用于微软登录的 ClientId
-    '本 fork 内置了 Azure CLI 的公开 ClientId，避免未设置环境变量时正版登录直接报 AADSTS900144
+    '本 fork 使用自建的 Azure 应用（租户 fad39b01-8fee-4b72-ad3a-caf0209f30a1）
+    '避免未设置环境变量时正版登录直接报 AADSTS900144
     '若需要自定义，设置环境变量 PCL_MS_CLIENT_ID 即可覆盖
-    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "04b07795-8ddb-461a-bbee-02f9e1bf7b46")
+    Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "2e83bd78-5f84-43da-ad36-2eac4a04f1c9")
     'CurseForge API Key
     Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "")
     '用于匿名数据收集的腾讯云日志服务上报 URL，形如 https://{region}.cls.tencentcs.com/track?topic_id={topic_id}
