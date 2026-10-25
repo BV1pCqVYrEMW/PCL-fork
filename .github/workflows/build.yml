@@ -100,10 +100,32 @@ jobs:
 
 
     - name: Replace
+      env:
+        PCL_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        PCL_CURSEFORGE_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
       run: |
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public OAuthClientId As String = If\(Environment\.GetEnvironmentVariable\("PCL_MS_CLIENT_ID"\), "[^"]*"\)', 'Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "${{ secrets.CLIENT_ID }}")' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "")', 'Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "${{ secrets.CURSEFORGE_API_KEY }}")' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-        (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = ""', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
+        $cid = $env:PCL_CLIENT_ID
+        if ([string]::IsNullOrWhiteSpace($cid)) {
+          Write-Host "::warning title=CLIENT_ID 未配置::仓库 Secrets 中没有 CLIENT_ID，将沿用源码内置值。如需覆盖请到 Settings > Secrets and variables > Actions 添加。"
+          $cid = '2e83bd78-5f84-43da-ad36-2eac4a04f1c9'
+        }
+        $cf = $env:PCL_CURSEFORGE_KEY
+        if ([string]::IsNullOrWhiteSpace($cf)) { $cf = '' }
+
+        $path = "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        $text = Get-Content $path -Raw -Encoding UTF8
+        $text = $text -replace 'Public OAuthClientId As String = If\(Environment\.GetEnvironmentVariable\("PCL_MS_CLIENT_ID"\), "[^"]*"\)', ('Public OAuthClientId As String = If(Environment.GetEnvironmentVariable("PCL_MS_CLIENT_ID"), "' + $cid + '")')
+        $text = $text -replace 'Public CurseForgeAPIKey As String = If\(Environment\.GetEnvironmentVariable\("PCL_CURSEFORGE_API_KEY"\), "[^"]*"\)', ('Public CurseForgeAPIKey As String = If(Environment.GetEnvironmentVariable("PCL_CURSEFORGE_API_KEY"), "' + $cf + '")')
+        [IO.File]::WriteAllText((Resolve-Path $path), $text, (New-Object Text.UTF8Encoding($false)))
+
+        $path2 = "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
+        $text2 = Get-Content $path2 -Raw -Encoding UTF8
+        $text2 = $text2 -replace 'Public Const CommitHash As String = "[^"]*"', ('Public Const CommitHash As String = "' + '${{ github.sha }}' + '"')
+        [IO.File]::WriteAllText((Resolve-Path $path2), $text2, (New-Object Text.UTF8Encoding($false)))
+
+        Write-Host "替换后校验："
+        Select-String -Path $path -Pattern 'OAuthClientId As String' | ForEach-Object { $_.Line.Trim() }
+        Select-String -Path $path2 -Pattern 'CommitHash As String' | ForEach-Object { $_.Line.Trim() }
         
     - name: Restore NuGet Packages
       run: dotnet restore PCLCS\PCLCS.csproj
