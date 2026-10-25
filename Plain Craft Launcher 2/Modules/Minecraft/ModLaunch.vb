@@ -885,8 +885,8 @@ LoginFinish:
         '初始请求
 Retry:
         McLaunchLog("开始微软登录步骤 1/6（原始登录）")
-        Dim PrepareJson As JObject = NetRequestByClientRetry("https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode", HttpMethod.Post,
-            Content:=$"client_id={OAuthClientId}&tenant=/consumers&scope=XboxLive.signin%20offline_access",
+        Dim PrepareJson As JObject = NetRequestByClientRetry("https://login.microsoftonline.com/fad39b01-8fee-4b72-ad3a-caf0209f30a1/oauth2/v2.0/devicecode", HttpMethod.Post,
+            Content:=$"client_id={OAuthClientId}&tenant=/fad39b01-8fee-4b72-ad3a-caf0209f30a1&scope=XboxLive.signin%20offline_access",
             ContentType:="application/x-www-form-urlencoded", RequireJson:=True).DeserializeJson()
         McLaunchLog("网页登录地址：" & PrepareJson("verification_uri").ToString)
 
