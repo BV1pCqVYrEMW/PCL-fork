@@ -469,7 +469,7 @@ Public Class FormMain
             Telemetry("启动")
             '开源版本提示
             If VersionBranchMain = "OpenSource" Then
-                MyMsgBox($"该版本中无法使用以下特性：{vbCrLf}- CurseForge API 调用：需要自行申请 API Key，然后添加到 ModSecret.vb 的开头{vbCrLf}- 正版登录：已在界面中隐藏。Minecraft API 只接受经过微软审批的应用注册，自建应用会在最后一步返回 403 Invalid app registration，与网络无关{vbCrLf}- 更新与联网通知：避免滥用隐患{vbCrLf}- 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……{vbCrLf}- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了……", "开源版本说明")
+                MyMsgBox($"PCL-Fork 说明：{vbCrLf}- 本版本为第三方基于 PCL 的二次创作，非官方作品，相关后果由使用者自行承担{vbCrLf}- 正版登录：已在界面中隐藏。Minecraft API 只接受经过微软审批的应用注册，自建应用会在最后一步返回 403 Invalid app registration，与网络无关{vbCrLf}- CurseForge：需要自行申请 API Key 并设置环境变量 PCL_CURSEFORGE_API_KEY{vbCrLf}- 启动器更新与联网通知：已移除{vbCrLf}- 主题：已解除限制，全部主题与自定义配色均可直接使用{vbCrLf}- 百宝箱：开发早期用途，功能有限", "PCL-Fork 说明")
             End If
         End Sub, "初始化", ThreadPriority.Lowest)
 

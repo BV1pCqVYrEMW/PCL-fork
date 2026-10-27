@@ -100,7 +100,15 @@ Friend Module ModSecret
                     ColorHue = 300 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 12
                 Case 13 '欧皇彩（同上）
                     ColorHue = 160 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 15
-                Case Else '0 龙猫蓝，以及 14 自定义等未单独定义的主题
+                Case 14 '自定义（读取设置中的色调/饱和度/亮度/渐变）
+                    '注意：本项目目标框架为 .NET Framework 4.8，没有 Math.Clamp，使用 Math.Max/Min
+                    ColorHue = Math.Max(0, Math.Min(360, Settings.Get(Of Integer)("UiLauncherHue")))
+                    ColorSat = Math.Max(0, Math.Min(100, Settings.Get(Of Integer)("UiLauncherSat")))
+                    '滑条范围 0-40，中值 20 表示不偏移，映射到 -20~+20
+                    ColorLightAdjust = Math.Max(0, Math.Min(40, Settings.Get(Of Integer)("UiLauncherLight"))) - 20
+                    '滑条范围 0-180，中值 90 表示无渐变，映射到 ±15 的顶部条色相偏移
+                    ColorHueTopbarDelta = CInt((Math.Max(0, Math.Min(180, Settings.Get(Of Integer)("UiLauncherDelta"))) - 90) / 6.0)
+                Case Else '0 龙猫蓝，以及未单独定义的主题
                     ColorHue = 210 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
             End Select
 

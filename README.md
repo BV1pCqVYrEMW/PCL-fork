@@ -1,4 +1,11 @@
-# Plain Craft Launcher
+# Plain Craft Launcher (PCL-Fork)
+
+> **本项目是第三方基于 [Meloong-Git/PCL](https://github.com/Meloong-Git/PCL) 独立进行的二次创作，并非 PCL 官方作品。**
+> 原作者为龙腾猫跃（LTCat），请优先支持[官方版本](https://meloong.com/pcl)。
+> 本仓库与官方无任何隶属关系，官方不对本分支的任何问题负责。
+> 若需反馈 PCL 本身的问题，请前往[官方仓库](https://github.com/Meloong-Git/PCL/issues)。
+
+本分支的修改包括：合并上游 2.99.0.1 的稳定性修复并保留 Minecraft 下载与整合包安装能力、隐藏正版登录入口、解除主题限制、移除启动器更新相关入口。自定义项说明见下列章节。
 
 [![Stars](https://img.shields.io/github/stars/Meloong-Git/PCL?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=Stars&labelColor=444444&color=eac54f)](https://github.com/Meloong-Git/PCL/)
 [![Issues](https://img.shields.io/github/issues/Meloong-Git/PCL?style=flat&label=Issues&labelColor=444444&color=1F883D)](https://github.com/Meloong-Git/PCL/issues)

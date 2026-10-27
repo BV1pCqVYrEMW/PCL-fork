@@ -342,3 +342,7 @@ ASALocalRun/
 healthchecksdb
 
 MaskFiles/
+
+# PCL-Fork：不随源码分发上游正式版二进制与历史补丁
+最新正式版.zip
+patches/

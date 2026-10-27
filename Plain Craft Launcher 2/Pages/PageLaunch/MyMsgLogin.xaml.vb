@@ -117,9 +117,16 @@ Public Class MyMsgLogin
                     MakeLog:=False, RequireJson:=True)
                 '获取结果
                 Dim ResultJson As JObject = Result.DeserializeJson()
+                Dim AccessToken = If(ResultJson("access_token"), "").ToString
+                'refresh_token 只有在请求了标准 offline_access 时才会返回，这里做空值保护
+                Dim RefreshToken = If(ResultJson("refresh_token"), "").ToString
+                If AccessToken = "" Then
+                    Finished(New Exception("$微软未返回访问令牌，请重试。"))
+                    Return
+                End If
                 McLaunchLog($"令牌过期时间：{ResultJson("expires_in")} 秒")
                 Hint("网页登录成功！", HintType.Green)
-                Finished({ResultJson("access_token").ToString, ResultJson("refresh_token").ToString})
+                Finished({AccessToken, RefreshToken})
                 Return
             Catch ex As Exception
                 '修改错误列表时，同时修改 ModLaunch.MsLoginStep1Refresh 中的对应代码
