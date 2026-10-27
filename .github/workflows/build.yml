@@ -1,6 +1,11 @@
 name: Build
 on:
+  # 网页 Actions 页面手动触发
   workflow_dispatch:
+  # 推送形如 build-xxxx 的 tag 即触发构建（普通分支推送不会触发）
+  push:
+    tags:
+      - 'build-*'
 
 jobs:
   cleanup:
