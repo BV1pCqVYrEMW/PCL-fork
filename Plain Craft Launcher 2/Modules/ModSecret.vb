@@ -96,7 +96,11 @@ Friend Module ModSecret
                     ColorHue = 0 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
                 Case 11 '极客蓝
                     ColorHue = 210 : ColorSat = 85 : ColorLightAdjust = -10 : ColorHueTopbarDelta = 0
-                Case Else '0 龙猫蓝，以及彩蛋主题等未单独定义的主题
+                Case 12 '滑稽彩（彩蛋主题的彩虹动画在开源版未实现，退化为固定色）
+                    ColorHue = 300 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 12
+                Case 13 '欧皇彩（同上）
+                    ColorHue = 160 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 15
+                Case Else '0 龙猫蓝，以及 14 自定义等未单独定义的主题
                     ColorHue = 210 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
             End Select
 
