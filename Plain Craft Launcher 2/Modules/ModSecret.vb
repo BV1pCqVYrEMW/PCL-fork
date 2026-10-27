@@ -70,6 +70,36 @@ Friend Module ModSecret
             If ThemeNow = NewTheme AndAlso NewTheme >= 0 Then Return
             If NewTheme >= 0 Then ThemeNow = NewTheme
 
+            '按主题序号设置色相、饱和度与亮度偏移。
+            '开源版原本把这三项写死为 210/85/0，导致切换主题时颜色完全不变，
+            '表现为所有主题都是同一种蓝色，这里补回各主题的配色参数。
+            Select Case ThemeNow
+                Case 1 '甜柠青
+                    ColorHue = 175 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 2 '小草绿
+                    ColorHue = 120 : ColorSat = 70 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 3 '菠萝黄
+                    ColorHue = 45 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 4 '橡木棕
+                    ColorHue = 28 : ColorSat = 55 : ColorLightAdjust = -5 : ColorHueTopbarDelta = 0
+                Case 5 '玄素黑
+                    ColorHue = 210 : ColorSat = 0 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 6 '铁杆粉
+                    ColorHue = 340 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 7 '神秘紫
+                    ColorHue = 270 : ColorSat = 75 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 8 '秋仪金
+                    ColorHue = 40 : ColorSat = 75 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 9 '活跃橙
+                    ColorHue = 25 : ColorSat = 90 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 10 '跳票红
+                    ColorHue = 0 : ColorSat = 80 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+                Case 11 '极客蓝
+                    ColorHue = 210 : ColorSat = 85 : ColorLightAdjust = -10 : ColorHueTopbarDelta = 0
+                Case Else '0 龙猫蓝，以及彩蛋主题等未单独定义的主题
+                    ColorHue = 210 : ColorSat = 85 : ColorLightAdjust = 0 : ColorHueTopbarDelta = 0
+            End Select
+
             Color1 = New MyColor().FromHSL2(ColorHue, ColorSat * 0.2, 25 + ColorLightAdjust * 0.3)
             Color2 = New MyColor().FromHSL2(ColorHue, ColorSat, 45 + ColorLightAdjust)
             Color3 = New MyColor().FromHSL2(ColorHue, ColorSat, 55 + ColorLightAdjust)

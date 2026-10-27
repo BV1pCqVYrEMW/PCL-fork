@@ -53,7 +53,13 @@ Public Class PageInstanceSetup
             UpdateJavaList()
 
             '服务器
-            ComboServerLogin.SelectedIndex = Settings.Get(Of Integer)("VersionServerLogin", Instance:=PageInstanceLeft.Instance)
+            Dim SavedServerLogin = Settings.Get(Of Integer)("VersionServerLogin", Instance:=PageInstanceLeft.Instance)
+            '本分支隐藏了正版登录（0 = 正版或离线，1 = 仅正版），统一回退到离线登录
+            If SavedServerLogin = 0 OrElse SavedServerLogin = 1 Then
+                SavedServerLogin = 2
+                Settings.Set("VersionServerLogin", 2, Instance:=PageInstanceLeft.Instance)
+            End If
+            ComboServerLogin.SelectedIndex = SavedServerLogin
             ComboServerLoginLast = ComboServerLogin.SelectedIndex
             UpdateServerLoginUI()
 
@@ -346,6 +352,11 @@ PreFin:
     Private ComboServerLoginLast As Integer
     Private Sub ComboServerLogin_Changed() Handles ComboServerLogin.SelectionChanged, TextServerNide.ValidatedTextChanged, TextServerAuthServer.ValidatedTextChanged, TextServerAuthRegister.ValidatedTextChanged
         If AniControlEnabled <> 0 Then Return
+        '本分支隐藏了正版登录，前两项（0、1）不可选
+        If ComboServerLogin.SelectedIndex >= 0 AndAlso ComboServerLogin.SelectedIndex <= 1 Then
+            ComboServerLogin.SelectedIndex = 2
+            Return
+        End If
         UpdateServerLoginUI()
         '检查是否输入正确，正确才触发设置改变
         If ComboServerLogin.SelectedIndex = 3 AndAlso Not TextServerNide.IsValidated Then Return

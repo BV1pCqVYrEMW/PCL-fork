@@ -294,10 +294,14 @@ Public Class PageLaunchLeft
         Dim LoginPageType As Integer
         If McInstanceSelected IsNot Nothing Then
             LoginPageType = Settings.Get(Of Integer)("VersionServerLogin", Instance:=McInstanceSelected)
+            '本分支隐藏正版登录：Minecraft API 会拒绝未经审批的第三方应用注册
+            '（login_with_xbox 返回 403 Invalid app registration），正版登录必然失败，统一回退到离线登录
+            If LoginPageType = 0 OrElse LoginPageType = 1 Then LoginPageType = 2
             '缓存当前版本的页面种类，下一次打开 McInstanceSelected 为空时才能加载出正确的页面
             Settings.Set("LoginPageType", LoginPageType)
         Else
             LoginPageType = Settings.Get(Of Integer)("LoginPageType")
+            If LoginPageType = 0 OrElse LoginPageType = 1 Then LoginPageType = 2
         End If
         Select Case LoginPageType
             Case 0 '正版或离线

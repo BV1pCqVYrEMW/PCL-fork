@@ -168,9 +168,10 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="登录方式" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboServerLogin" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="1">
-                            <local:MyComboBoxItem Content="正版登录或离线登录" IsSelected="True" />
-                            <local:MyComboBoxItem Content="仅正版登录" />
-                            <local:MyComboBoxItem Content="仅离线登录" />
+                            <!-- 本分支隐藏正版登录（Minecraft API 拒绝未审批的第三方应用注册），故前两项不显示 -->
+                            <local:MyComboBoxItem Content="正版登录或离线登录" Visibility="Collapsed" />
+                            <local:MyComboBoxItem Content="仅正版登录" Visibility="Collapsed" />
+                            <local:MyComboBoxItem Content="仅离线登录" IsSelected="True" />
                             <local:MyComboBoxItem Content="第三方登录：统一通行证" />
                             <local:MyComboBoxItem Content="第三方登录：Authlib Injector 或 LittleSkin" />
                         </local:MyComboBox>
