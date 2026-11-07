@@ -262,35 +262,22 @@ NextInner:
                 End Select
             End Sub, "Donate")
         End If
-        '正版购买提示（本分支：只弹一次，之后不再出现）
-        If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
-           Not Settings.Get(Of Boolean)("HintBuy") AndAlso Settings.Get(Of McLoginType)("LoginType") <> McLoginType.Ms Then
-            If Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh") OrElse Globalization.CultureInfo.CurrentUICulture.Name.StartsWithF("zh") Then '中文？
-                RunInNewThread(
-                Sub()
-                    Select Case Settings.Get(Of Integer)("SystemLaunchCount")
-                        Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
-                            '无论用户选择哪一项，都标记为已提示，保证只弹这一次
-                            Settings.Set("HintBuy", True)
-                            If MyMsgBox("你已经启动了 " & Settings.Get(Of Integer)("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。",
-                                "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
-                                OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
-                            End If
-                    End Select
-                End Sub, "Buy Minecraft")
-            ElseIf Settings.Get(Of McLoginType)("LoginType") = McLoginType.Legacy Then
-                '非中文环境的正版验证拦截保持原样：不写入 HintBuy，
-                '以免绕过 LICENCE 要求的正版购买劝导（未开始游戏，不计入启动次数）
-                Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
-                    Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
-                    Case 2
-                        Hint("游戏将以试玩模式启动！", HintType.Red)
-                        CurrentLaunchOptions.ExtraGameArgs.Add("--demo")
-                    Case 3
-                        Throw New OperationCanceledException
-                End Select
-            End If
+        '正版购买劝导已改为启动页的常驻按钮（PageLaunchLeft.xaml 的 BtnBuyMinecraft），
+        '不再在启动时弹窗；此处仅保留非中文环境的正版验证拦截，
+        '以免绕过 LICENCE 第 37 条要求的正版购买劝导。
+        If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不拦截
+           Not Settings.Get(Of Boolean)("HintBuy") AndAlso
+           Settings.Get(Of McLoginType)("LoginType") = McLoginType.Legacy AndAlso
+           Not (Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh") OrElse
+                Globalization.CultureInfo.CurrentUICulture.Name.StartsWithF("zh")) Then
+            Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
+                Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
+                Case 2
+                    Hint("游戏将以试玩模式启动！", HintType.Red)
+                    CurrentLaunchOptions.ExtraGameArgs.Add("--demo")
+                Case 3
+                    Throw New OperationCanceledException
+            End Select
         End If
     End Sub
 
