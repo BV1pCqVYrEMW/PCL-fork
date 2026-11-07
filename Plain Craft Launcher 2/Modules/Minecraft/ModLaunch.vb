@@ -244,12 +244,15 @@ NextInner:
         Dim CheckResult As String = ""
         RunInUiWait(Sub() CheckResult = McLoginAble(McLoginInput()))
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
-        '求赞助
-        If BuildType = BuildTypes.Release AndAlso CurrentLaunchOptions?.SaveBatch Is Nothing Then '保存脚本时不提示
+        '求赞助（本分支：只弹一次，之后不再出现）
+        If BuildType = BuildTypes.Release AndAlso CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso
+           Not Settings.Get(Of Boolean)("HintDonate") Then '保存脚本时不提示；已提示过则跳过
             RunInNewThread(
             Sub()
                 Select Case Settings.Get(Of Integer)("SystemLaunchCount")
                     Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
+                        '无论用户选择哪一项，都标记为已提示，保证只弹这一次
+                        Settings.Set("HintDonate", True)
                         If MyMsgBox("PCL 已经为你启动了 " & Settings.Get(Of Integer)("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
                                     "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
                                     "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
@@ -259,7 +262,7 @@ NextInner:
                 End Select
             End Sub, "Donate")
         End If
-        '正版购买提示
+        '正版购买提示（本分支：只弹一次，之后不再出现）
         If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
            Not Settings.Get(Of Boolean)("HintBuy") AndAlso Settings.Get(Of McLoginType)("LoginType") <> McLoginType.Ms Then
             If Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh") OrElse Globalization.CultureInfo.CurrentUICulture.Name.StartsWithF("zh") Then '中文？
@@ -267,15 +270,18 @@ NextInner:
                 Sub()
                     Select Case Settings.Get(Of Integer)("SystemLaunchCount")
                         Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
+                            '无论用户选择哪一项，都标记为已提示，保证只弹这一次
+                            Settings.Set("HintBuy", True)
                             If MyMsgBox("你已经启动了 " & Settings.Get(Of Integer)("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
-                                "在登录一次正版账号后，就不会再出现这个提示了！",
+                                "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。",
                                 "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
                                 OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                             End If
                     End Select
                 End Sub, "Buy Minecraft")
             ElseIf Settings.Get(Of McLoginType)("LoginType") = McLoginType.Legacy Then
+                '非中文环境的正版验证拦截保持原样：不写入 HintBuy，
+                '以免绕过 LICENCE 要求的正版购买劝导（未开始游戏，不计入启动次数）
                 Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2

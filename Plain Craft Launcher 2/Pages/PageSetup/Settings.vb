@@ -14,6 +14,8 @@ Public Class Settings
         New Setting("HintHide", False, Source:=Sources.Registry),
         New Setting("HintHandInstall", False, Source:=Sources.Registry),
         New Setting("HintBuy", False, Source:=Sources.Registry),
+        '本分支：赞助提示只弹一次
+        New Setting("HintDonate", False, Source:=Sources.Registry),
         New Setting("HintClearRubbish", 0, Source:=Sources.Registry),
         New Setting("HintUpdateMod", False, Source:=Sources.Registry),
         New Setting("HintCustomCommand", False, Source:=Sources.Registry),
